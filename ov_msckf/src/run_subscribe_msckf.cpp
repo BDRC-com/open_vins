@@ -117,6 +117,9 @@ int main(int argc, char **argv) {
 #if ROS_AVAILABLE == 1
   ros::shutdown();
 #elif ROS_AVAILABLE == 2
+  viz.reset();
+  sys.reset();
+  node.reset();
   rclcpp::shutdown();
 #endif
 

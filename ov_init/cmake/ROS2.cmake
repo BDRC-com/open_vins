@@ -27,6 +27,11 @@ list(APPEND thirdparty_libraries
         ${CERES_LIBRARIES}
         ${OpenCV_LIBRARIES}
 )
+list(APPEND ament_libraries
+        rclcpp
+        cv_bridge
+        ov_core
+)
 
 ##################################################
 # Make the shared library

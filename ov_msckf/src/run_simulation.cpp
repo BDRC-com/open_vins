@@ -183,6 +183,10 @@ int main(int argc, char **argv) {
   ros::shutdown();
 #elif ROS_AVAILABLE == 2
   viz->visualize_final();
+  viz.reset();
+  sys.reset();
+  sim.reset();
+  node.reset();
   rclcpp::shutdown();
 #endif
 

@@ -480,6 +480,17 @@ void TrackDescriptor::perform_detection_stereo(const cv::Mat &img0, const cv::Ma
 void TrackDescriptor::robust_match(const std::vector<cv::KeyPoint> &pts0, const std::vector<cv::KeyPoint> &pts1, const cv::Mat &desc0,
                                    const cv::Mat &desc1, size_t id0, size_t id1, std::vector<cv::DMatch> &matches) {
 
+  // ORB extraction can legitimately yield no descriptors for a frame or a camera.
+  // In that case there is nothing to match, so return without calling into OpenCV.
+  if (pts0.empty() || pts1.empty() || desc0.empty() || desc1.empty()) {
+    return;
+  }
+
+  // Protect the matcher from inconsistent descriptor matrices.
+  if (desc0.rows != (int)pts0.size() || desc1.rows != (int)pts1.size() || desc0.cols != desc1.cols || desc0.type() != desc1.type()) {
+    return;
+  }
+
   // Our 1to2 and 2to1 match vectors
   std::vector<std::vector<cv::DMatch>> matches0to1, matches1to0;
 
