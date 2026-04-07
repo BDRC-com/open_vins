@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "cam/CamEqui.h"
+#include "cam/CamCameraModels.h"
 #include "cam/CamRadtan.h"
 #include "feat/FeatureInitializerOptions.h"
 #include "track/TrackBase.h"
@@ -271,22 +272,12 @@ struct InertialInitializerOptions {
           parser->parse_external("relative_config_imucam", "cam" + std::to_string(i), "timeshift_cam_imu", calib_camimu_dt, false);
         }
 
+        std::string calib_file;
+        parser->parse_external("relative_config_imucam", "cam" + std::to_string(i), "cam_calib_file", calib_file, false);
+
         // Distortion model
         std::string dist_model = "radtan";
         parser->parse_external("relative_config_imucam", "cam" + std::to_string(i), "distortion_model", dist_model);
-
-        // Distortion parameters
-        std::vector<double> cam_calib1 = {1, 1, 0, 0};
-        std::vector<double> cam_calib2 = {0, 0, 0, 0};
-        parser->parse_external("relative_config_imucam", "cam" + std::to_string(i), "intrinsics", cam_calib1);
-        parser->parse_external("relative_config_imucam", "cam" + std::to_string(i), "distortion_coeffs", cam_calib2);
-        Eigen::VectorXd cam_calib = Eigen::VectorXd::Zero(8);
-        cam_calib << cam_calib1.at(0), cam_calib1.at(1), cam_calib1.at(2), cam_calib1.at(3), cam_calib2.at(0), cam_calib2.at(1),
-            cam_calib2.at(2), cam_calib2.at(3);
-        cam_calib(0) /= (downsample_cameras) ? 2.0 : 1.0;
-        cam_calib(1) /= (downsample_cameras) ? 2.0 : 1.0;
-        cam_calib(2) /= (downsample_cameras) ? 2.0 : 1.0;
-        cam_calib(3) /= (downsample_cameras) ? 2.0 : 1.0;
 
         // FOV / resolution
         std::vector<int> matrix_wh = {1, 1};
@@ -304,12 +295,37 @@ struct InertialInitializerOptions {
         cam_eigen.block(4, 0, 3, 1) = -T_CtoI.block(0, 0, 3, 3).transpose() * T_CtoI.block(0, 3, 3, 1);
 
         // Create intrinsics model
-        if (dist_model == "equidistant") {
-          camera_intrinsics.insert({i, std::make_shared<ov_core::CamEqui>(matrix_wh.at(0), matrix_wh.at(1))});
-          camera_intrinsics.at(i)->set_value(cam_calib);
+        if (!calib_file.empty()) {
+          boost::filesystem::path calib_path(calib_file);
+          if (!calib_path.is_absolute()) {
+            boost::system::error_code error_code;
+            boost::filesystem::path config_path = boost::filesystem::canonical(parser->get_config_path(), error_code);
+            if (error_code) {
+              config_path = boost::filesystem::path(parser->get_config_path());
+            }
+            calib_path = config_path.parent_path() / calib_path;
+          }
+          camera_intrinsics.insert({i, ov_core::CamCameraModels::CreateFromYaml(calib_path.string())});
         } else {
-          camera_intrinsics.insert({i, std::make_shared<ov_core::CamRadtan>(matrix_wh.at(0), matrix_wh.at(1))});
-          camera_intrinsics.at(i)->set_value(cam_calib);
+          std::vector<double> cam_calib1 = {1, 1, 0, 0};
+          std::vector<double> cam_calib2 = {0, 0, 0, 0};
+          parser->parse_external("relative_config_imucam", "cam" + std::to_string(i), "intrinsics", cam_calib1);
+          parser->parse_external("relative_config_imucam", "cam" + std::to_string(i), "distortion_coeffs", cam_calib2);
+          Eigen::VectorXd cam_calib = Eigen::VectorXd::Zero(8);
+          cam_calib << cam_calib1.at(0), cam_calib1.at(1), cam_calib1.at(2), cam_calib1.at(3), cam_calib2.at(0), cam_calib2.at(1),
+              cam_calib2.at(2), cam_calib2.at(3);
+          cam_calib(0) /= (downsample_cameras) ? 2.0 : 1.0;
+          cam_calib(1) /= (downsample_cameras) ? 2.0 : 1.0;
+          cam_calib(2) /= (downsample_cameras) ? 2.0 : 1.0;
+          cam_calib(3) /= (downsample_cameras) ? 2.0 : 1.0;
+
+          if (dist_model == "equidistant") {
+            camera_intrinsics.insert({i, std::make_shared<ov_core::CamEqui>(matrix_wh.at(0), matrix_wh.at(1))});
+            camera_intrinsics.at(i)->set_value(cam_calib);
+          } else {
+            camera_intrinsics.insert({i, std::make_shared<ov_core::CamRadtan>(matrix_wh.at(0), matrix_wh.at(1))});
+            camera_intrinsics.at(i)->set_value(cam_calib);
+          }
         }
         camera_extrinsics.insert({i, cam_eigen});
       }

@@ -1,0 +1,35 @@
+%YAML:1.0
+
+# Use the OpenVINS-targeted calibration shipped with CyperstereoSDK.
+# This is a converted fisheye/equidistant model and is far closer to the validated
+# CyperStereo calibration than the previous pinhole+radtan approximation.
+
+cam0:
+  T_cam_imu:
+    - [-0.99999468, -0.00294682, 0.001397, 0.13933093]
+    - [0.00295706, -0.99996839, 0.00738107, 0.0019162]
+    - [0.0013752, 0.00738516, 0.99997178, -0.01254143]
+    - [0.0, 0.0, 0.0, 1.0]
+  cam_overlaps: [1]
+  camera_model: pinhole
+  distortion_coeffs: [0.0860707814004475, 0.04823967356062804, -0.029182411948702858, 0.0026837591688934396]
+  distortion_model: equidistant
+  intrinsics: [236.60608148032415, 236.49410788135432, 370.1205222632487, 231.42010944897646]
+  resolution: [752, 480]
+  rostopic: /cam0/image_raw
+  timeshift_cam_imu: -0.0005774159976092525
+
+cam1:
+  T_cam_imu:
+    - [-0.99998038, -0.00399441, 0.00482621, -0.01078334]
+    - [0.00398862, -0.99999131, -0.00120918, 0.00279976]
+    - [0.004831, -0.00118991, 0.99998762, -0.01281989]
+    - [0.0, 0.0, 0.0, 1.0]
+  cam_overlaps: [0]
+  camera_model: pinhole
+  distortion_coeffs: [0.059909895946624624, 0.17009685314582287, -0.22590902574899585, 0.10683581897353794]
+  distortion_model: equidistant
+  intrinsics: [237.12530151114527, 237.37575269431363, 351.9981361033703, 242.10713162549797]
+  resolution: [752, 480]
+  rostopic: /cam1/image_raw
+  timeshift_cam_imu: -0.0005699507149542813

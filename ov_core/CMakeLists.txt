@@ -8,7 +8,8 @@ find_package(OpenCV 3 QUIET)
 if (NOT OpenCV_FOUND)
     find_package(OpenCV 4 REQUIRED)
 endif ()
-find_package(Boost REQUIRED COMPONENTS system filesystem thread date_time)
+find_package(camera_models REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system filesystem thread date_time program_options)
 message(STATUS "OPENCV: " ${OpenCV_VERSION} " | BOOST: " ${Boost_VERSION})
 
 # By default we build with ROS, but you can disable this and just build as a library

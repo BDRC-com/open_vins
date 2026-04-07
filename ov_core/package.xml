@@ -32,6 +32,7 @@
     <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake</buildtool_depend>
     <depend condition="$ROS_VERSION == 2">rclcpp</depend>
     <depend condition="$ROS_VERSION == 2">cv_bridge</depend>
+    <depend condition="$ROS_VERSION == 2">camera_models</depend>
 
     <!-- System dependencies for both versions -->
     <depend>eigen</depend>

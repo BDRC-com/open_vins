@@ -103,6 +103,12 @@ public:
   std::string get_config_folder() { return config_path_.substr(0, config_path_.find_last_of('/')) + "/"; }
 
   /**
+   * @brief Will get the raw config file path used to construct this parser
+   * @return Config file path
+   */
+  std::string get_config_path() const { return config_path_; }
+
+  /**
    * @brief Check to see if all parameters were read succesfully
    * @return True if we found all parameters
    */
