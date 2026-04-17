@@ -568,6 +568,8 @@ void VioManager::do_feature_propagate_update(const ov_core::CameraData &message)
     good_features_MSCKF.push_back(feat->p_FinG);
     feat->to_delete = true;
   }
+  PRINT_INFO("[MSCKF-COUNT]: good_features_MSCKF=%zu featsup_MSCKF=%zu sensor0=%d\n", good_features_MSCKF.size(),
+             featsup_MSCKF.size(), message.sensor_ids.at(0));
 
   //===================================================================================
   // Cleanup, marginalize out what we don't need any more...

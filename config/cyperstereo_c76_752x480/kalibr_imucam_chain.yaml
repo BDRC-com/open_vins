@@ -1,0 +1,34 @@
+%YAML:1.0
+
+# Use the C76 CyperStereo IMU-camera calibration from
+# C76_cyperstereo_imu_calibra-results-imucam/cyperstereo_imu_calibra-results-imucam.txt.
+
+cam0:
+  T_cam_imu:
+    - [-0.99998768, 0.00449311, 0.00211068, 0.13747068]
+    - [-0.00450474, -0.99997454, -0.0055343, 0.0001791]
+    - [0.00208576, -0.00554374, 0.99998246, -0.01685054]
+    - [0.0, 0.0, 0.0, 1.0]
+  cam_overlaps: [1]
+  camera_model: pinhole
+  distortion_coeffs: [0.09942329537977837, 0.019236338944603016, 0.011875922020099672, -0.01720382142727744]
+  distortion_model: equidistant
+  intrinsics: [234.9307127382276, 234.8198129795181, 354.6080814766652, 243.50386035083528]
+  resolution: [752, 480]
+  rostopic: /cam0/image_raw
+  timeshift_cam_imu: -0.00044035682884727536
+
+cam1:
+  T_cam_imu:
+    - [-0.99987489, -0.00598663, 0.014641, -0.01250978]
+    - [0.00593352, -0.99997567, -0.00366847, 0.00055659]
+    - [0.0146626, -0.00358113, 0.99988609, -0.01707006]
+    - [0.0, 0.0, 0.0, 1.0]
+  cam_overlaps: [0]
+  camera_model: pinhole
+  distortion_coeffs: [0.0885536766233, 0.05542636333201814, -0.03424527196515095, 0.004316985132718587]
+  distortion_model: equidistant
+  intrinsics: [234.3452220521101, 234.35045674254565, 359.48958940737754, 195.77591528203308]
+  resolution: [752, 480]
+  rostopic: /cam1/image_raw
+  timeshift_cam_imu: -0.0003976784198845605

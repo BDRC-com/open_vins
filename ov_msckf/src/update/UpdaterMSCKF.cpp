@@ -61,6 +61,11 @@ void UpdaterMSCKF::update(std::shared_ptr<State> state, std::vector<std::shared_
   if (feature_vec.empty())
     return;
 
+  size_t raw_candidate_count = feature_vec.size();
+  size_t triangulation_candidate_count = 0;
+  size_t triangulation_pass_count = 0;
+  size_t chi2_pass_count = 0;
+
   // Start timing
   boost::posix_time::ptime rT0, rT1, rT2, rT3, rT4, rT5;
   rT0 = boost::posix_time::microsec_clock::local_time();
@@ -93,6 +98,7 @@ void UpdaterMSCKF::update(std::shared_ptr<State> state, std::vector<std::shared_
     }
   }
   rT1 = boost::posix_time::microsec_clock::local_time();
+  triangulation_candidate_count = feature_vec.size();
 
   // 2. Create vector of cloned *CAMERA* poses at each of our clone timesteps
   std::unordered_map<size_t, std::unordered_map<double, FeatureInitializer::ClonePose>> clones_cam;
@@ -141,6 +147,7 @@ void UpdaterMSCKF::update(std::shared_ptr<State> state, std::vector<std::shared_
     it1++;
   }
   rT2 = boost::posix_time::microsec_clock::local_time();
+  triangulation_pass_count = feature_vec.size();
 
   // Calculate the max possible measurement size
   size_t max_meas_size = 0;
@@ -255,6 +262,10 @@ void UpdaterMSCKF::update(std::shared_ptr<State> state, std::vector<std::shared_
     it2++;
   }
   rT3 = boost::posix_time::microsec_clock::local_time();
+  chi2_pass_count = feature_vec.size();
+
+  PRINT_INFO("[MSCKF-COUNT]: raw=%zu triangulation_candidates=%zu triangulation_pass=%zu chi2_pass=%zu\n", raw_candidate_count,
+             triangulation_candidate_count, triangulation_pass_count, chi2_pass_count);
 
   // We have appended all features to our Hx_big, res_big
   // Delete it so we do not reuse information

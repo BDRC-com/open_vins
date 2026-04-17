@@ -44,6 +44,21 @@ launch_args = [
         name="save_total_state",
         default_value="false",
         description="record the total state with calibration and features to a txt file",
+    ),
+    DeclareLaunchArgument(
+        name="filepath_est",
+        default_value="state_estimate.txt",
+        description="output path for estimated state dump when save_total_state is enabled",
+    ),
+    DeclareLaunchArgument(
+        name="filepath_std",
+        default_value="state_deviation.txt",
+        description="output path for state deviation dump when save_total_state is enabled",
+    ),
+    DeclareLaunchArgument(
+        name="filepath_gt",
+        default_value="state_groundtruth.txt",
+        description="output path for groundtruth state dump when save_total_state is enabled",
     )
 ]
 
@@ -85,6 +100,9 @@ def launch_setup(context):
             {"use_stereo": LaunchConfiguration("use_stereo")},
             {"max_cameras": LaunchConfiguration("max_cameras")},
             {"save_total_state": LaunchConfiguration("save_total_state")},
+            {"filepath_est": LaunchConfiguration("filepath_est")},
+            {"filepath_std": LaunchConfiguration("filepath_std")},
+            {"filepath_gt": LaunchConfiguration("filepath_gt")},
             {"config_path": config_path},
         ],
     )

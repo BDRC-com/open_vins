@@ -18,6 +18,8 @@ details on what the system supports.
 * Documentation - https://docs.openvins.com/
 * Getting started guide - https://docs.openvins.com/getting-started.html
 * Publication reference - https://pgeneva.com/downloads/papers/Geneva2020ICRA.pdf
+* Workspace-specific Chinese workflow note - [OpenVINS_Workflow_CN.md](OpenVINS_Workflow_CN.md)
+* Workspace-specific regression note - [docs/regression_workflow_cn.md](docs/regression_workflow_cn.md)
 
 ## News / Events
 
