@@ -7,6 +7,7 @@
 ```bash
 git clone https://github.com/BDRC-com/open_vins.git
 cd open_vins
+git switch wan
 export VERSION=ros2_22_04
 docker build -t ov_$VERSION -f Dockerfile_$VERSION .
 ```
