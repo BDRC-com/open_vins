@@ -8,3 +8,6 @@ doxgen_generated
 *.swo
 doc
 .vscode
+
+# Runtime outputs
+duration.txt
